@@ -215,7 +215,7 @@
             white-space: nowrap;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
-        /* ===== 左上角标记（可配置：休/假/★等） ===== */
+        /* ===== 左上角标记 ===== */
         .holiday-badge {
             position: absolute;
             top: 1px;
@@ -276,29 +276,6 @@
             border-radius: 12px;
             border: 1px solid #000;
         }
-        .holiday-list {
-            margin-top: 12px;
-            padding: 10px;
-            background: #f8fafc;
-            border-radius: 12px;
-            font-size: 12px;
-            color: #475569;
-            border: 1px solid #000;
-            line-height: 1.8;
-        }
-        .holiday-list strong {
-            color: #1e293b;
-        }
-        .holiday-list .tag {
-            display: inline-block;
-            background: #fef3c7;
-            color: #92400e;
-            padding: 0 8px;
-            border-radius: 12px;
-            font-weight: 600;
-            border: 1px solid #000;
-            margin: 0 2px;
-        }
     </style>
 </head>
 <body>
@@ -323,8 +300,7 @@
 
     <div class="calendar-grid" id="calendarGrid"></div>
     <div class="footnote">⭐ 法定假期标注 · 今日高亮 · 黑色边框</div>
-    <div class="debug-info" id="debugInfo">加载中...</div>
-    <div class="holiday-list" id="holidayList"></div>
+    
 </div>
 <script>
     (function() {
@@ -335,7 +311,7 @@
         // ============================================================
         const HOLIDAYS = {
             // 2026年9月
-            '2026-9-10': { name: '教师节', badge: '' },      // 教师节不显示"休"
+            '2026-9-10': { name: '教师节', badge: '' },
             // 2026年10月
             '2026-9-25': { name: '中秋节', badge: '休' },
 '2026-10-1': { name: '国庆节', badge: '休' },
@@ -435,7 +411,6 @@
 
         const monthRendered = {};
         let holidayCount = 0;
-        const holidayDates = [];
 
         // 逐行渲染
         weeks.forEach((week) => {
@@ -496,20 +471,17 @@
                 const holiday = HOLIDAYS[day.dateStr];
                 if (holiday) {
                     cell.classList.add('holiday');
-                    // 左上角标记（可配置：休/假/★ 或空）
                     if (holiday.badge && holiday.badge !== '') {
                         const badge = document.createElement('span');
                         badge.className = 'holiday-badge';
                         badge.textContent = holiday.badge;
                         cell.appendChild(badge);
                     }
-                    // 假期名称标签
                     const label = document.createElement('span');
                     label.className = 'holiday-label';
                     label.textContent = holiday.name;
                     cell.appendChild(label);
                     holidayCount++;
-                    holidayDates.push(`${day.dateStr} (${holiday.name})`);
                 }
 
                 if (day.isToday) {
@@ -524,26 +496,6 @@
         const debugEl = document.getElementById('debugInfo');
         const holidayKeys = Object.keys(HOLIDAYS);
         debugEl.innerHTML = `✅ 已配置 ${holidayKeys.length} 个假期，日历中渲染了 ${holidayCount} 个假期标签`;
-
-        // 显示假期列表
-        const listEl = document.getElementById('holidayList');
-        if (holidayKeys.length > 0) {
-            let html = '<strong>📋 法定假期列表（可在此修改）：</strong><br>';
-            const sorted = holidayKeys.sort();
-            sorted.forEach(date => {
-                const h = HOLIDAYS[date];
-                const badge = h.badge ? ` [${h.badge}]` : '';
-                html += `<span class="tag">${date}</span> → ${h.name}${badge} &nbsp;`;
-            });
-            listEl.innerHTML = html;
-        } else {
-            listEl.innerHTML = '⚠️ 未配置法定假期';
-        }
-
-        console.log('📅 假期配置:', HOLIDAYS);
-        console.log('📊 假期总数:', holidayKeys.length);
-        console.log('🏷️ 渲染的假期标签数:', holidayCount);
-        console.log('📌 假期日期列表:', holidayDates);
 
         // 倒计时更新
         function updateCountdown() {
