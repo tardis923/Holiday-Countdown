@@ -24,7 +24,7 @@
             background: white;
             border-radius: 32px 32px 24px 24px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-            padding: 20px 16px 28px;
+            padding: 20px 12px 28px;
         }
         .countdown-card {
             background: linear-gradient(145deg, #1a2a6c, #214a7a);
@@ -66,13 +66,13 @@
         }
         .week-header {
             display: grid;
-            grid-template-columns: 0.8fr 0.8fr repeat(7, 1fr);
+            grid-template-columns: 0.6fr 0.6fr repeat(7, 1fr);
             background: #eef2f7;
             border-radius: 12px;
-            padding: 8px 4px;
+            padding: 6px 2px;
             margin: 6px 0 8px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             color: #1e293b;
             text-align: center;
             border: 1px solid #000;
@@ -85,27 +85,28 @@
 
         .calendar-grid {
             display: grid;
-            grid-template-columns: 0.8fr 0.8fr repeat(7, 1fr);
+            grid-template-columns: 0.6fr 0.6fr repeat(7, 1fr);
             border: 1px solid #000;
             border-radius: 12px;
             overflow: hidden;
             background: white;
         }
         .cell {
-            min-height: 50px;
+            min-height: 44px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 500;
             color: #0f172a;
             background: white;
             border-bottom: 1px solid #000;
             border-right: 1px solid #000;
-            padding: 4px 2px;
+            padding: 2px 1px;
             position: relative;
             text-align: center;
+            overflow: hidden;
         }
         .cell:nth-child(9n) {
             border-right: none;
@@ -116,7 +117,7 @@
 
         .cell.month-cell {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 14px;
             color: #0f172a;
             background: #f1f5f9;
             border-right: 1px solid #000;
@@ -128,16 +129,16 @@
         }
         .cell.week-cell {
             font-weight: 600;
-            font-size: 12px;
+            font-size: 11px;
             color: #475569;
             background: #f8fafc;
             border-right: 1px solid #000;
         }
         .cell.week-cell span {
             background: #e2e8f0;
-            padding: 2px 6px;
+            padding: 1px 5px;
             border-radius: 30px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #1e293b;
             white-space: nowrap;
@@ -156,16 +157,16 @@
             background: #fef3c7 !important;
             color: #92400e;
         }
-        .cell.weekend.holiday .holiday-label {
-            background: #d97706;
-            color: white;
+        .cell.weekend.special {
+            background: #dbeafe !important;
+            color: #1e40af;
         }
 
         /* ===== 今日高亮 ===== */
         .cell.today {
             background: #1e3a8a !important;
             color: white !important;
-            border-radius: 16px;
+            border-radius: 12px;
             font-weight: 700;
             box-shadow: 0 4px 8px rgba(30,58,138,0.25);
             transform: scale(1.02);
@@ -177,9 +178,17 @@
             background: #b45309 !important;
             border-color: #000 !important;
         }
+        .cell.today.special {
+            background: #1e40af !important;
+            border-color: #000 !important;
+        }
         .cell.today .holiday-label {
             background: #f59e0b;
             color: #1e293b;
+        }
+        .cell.today .special-label {
+            background: #3b82f6;
+            color: white;
         }
         .cell.today.weekend {
             background: #1e3a8a !important;
@@ -189,12 +198,16 @@
             background: #b45309 !important;
             color: white !important;
         }
+        .cell.today.weekend.special {
+            background: #1e40af !important;
+            color: white !important;
+        }
 
         /* ===== 法定假期 ===== */
         .cell.holiday {
             background: #fef3c7 !important;
             color: #92400e;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 700;
             border: 2px solid #000 !important;
             box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
@@ -202,39 +215,78 @@
             z-index: 1;
         }
         .holiday-label {
-            font-size: 8px;
+            font-size: 7px;
             background: #d97706;
             color: white;
-            padding: 1px 8px;
+            padding: 1px 5px;
             border-radius: 30px;
-            margin-top: 2px;
+            margin-top: 1px;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            line-height: 1.4;
+            letter-spacing: 0.3px;
+            line-height: 1.3;
             display: inline-block;
             white-space: nowrap;
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
+
+        /* ===== 特殊日期 ===== */
+        .cell.special {
+            background: #dbeafe !important;
+            color: #1e40af;
+            border-radius: 10px;
+            font-weight: 700;
+            border: 2px solid #000 !important;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .special-label {
+            font-size: 7px;
+            background: #2563eb;
+            color: white;
+            padding: 1px 5px;
+            border-radius: 30px;
+            margin-top: 1px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            line-height: 1.3;
+            display: inline-block;
+            white-space: nowrap;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
         /* ===== 左上角标记 ===== */
-        .holiday-badge {
+        .badge {
             position: absolute;
             top: 1px;
-            left: 4px;
-            font-size: 10px;
+            left: 3px;
+            font-size: 8px;
             font-weight: 700;
-            color: #dc2626;
-            background: transparent;
             line-height: 1;
             z-index: 3;
             text-shadow: 0 0 2px white, 0 0 4px white;
         }
-        .cell.today .holiday-badge {
+        .badge-holiday {
+            color: #dc2626;
+        }
+        .badge-special {
+            color: #1d4ed8;
+        }
+        .cell.today .badge-holiday {
             color: #fca5a5;
             text-shadow: 0 0 2px #1e3a8a, 0 0 4px #1e3a8a;
         }
-        .cell.today.holiday .holiday-badge {
+        .cell.today .badge-special {
+            color: #93c5fd;
+            text-shadow: 0 0 2px #1e3a8a, 0 0 4px #1e3a8a;
+        }
+        .cell.today.holiday .badge-holiday {
             color: #fcd34d;
             text-shadow: 0 0 2px #b45309, 0 0 4px #b45309;
+        }
+        .cell.today.special .badge-special {
+            color: #93c5fd;
+            text-shadow: 0 0 2px #1e40af, 0 0 4px #1e40af;
         }
 
         .month-bg-9 { background: #e8f0fe; }
@@ -243,37 +295,52 @@
         .month-bg-12 { background: #fff3e0; }
         .month-bg-1 { background: #fce4ec; }
         .cell.holiday { background: #fef3c7 !important; }
+        .cell.special { background: #dbeafe !important; }
         .cell.today { background: #1e3a8a !important; }
         .cell.today.holiday { background: #b45309 !important; }
+        .cell.today.special { background: #1e40af !important; }
         .cell.weekend.holiday { color: #92400e; }
+        .cell.weekend.special { color: #1e40af; }
         .cell.weekend.today { color: white; }
 
-        @media (max-width: 420px) {
-            .cell { font-size: 13px; min-height: 42px; padding: 3px 1px; }
-            .week-header { font-size: 11px; padding: 6px 2px; }
-            .countdown-number { font-size: 38px; }
-            .holiday-label { font-size: 6px; padding: 0 4px; }
-            .holiday-badge { font-size: 8px; top: 0px; left: 2px; }
-            .cell.month-cell { font-size: 14px; }
-            .cell.week-cell { font-size: 10px; }
-            .cell.week-cell span { font-size: 9px; padding: 1px 4px; }
+        @media (max-width: 480px) {
+            .calendar-wrapper { padding: 16px 8px 20px; }
+            .cell { font-size: 12px; min-height: 38px; padding: 2px 1px; }
+            .week-header { font-size: 10px; padding: 4px 1px; gap: 0px; }
+            .week-header > div { padding: 0 1px; }
+            .countdown-number { font-size: 34px; }
+            .holiday-label, .special-label { font-size: 6px; padding: 0 3px; }
+            .badge { font-size: 7px; top: 0px; left: 2px; }
+            .cell.month-cell { font-size: 12px; }
+            .cell.week-cell { font-size: 9px; }
+            .cell.week-cell span { font-size: 8px; padding: 1px 4px; }
+        }
+        @media (max-width: 380px) {
+            .cell { font-size: 10px; min-height: 34px; }
+            .week-header { font-size: 9px; }
+            .countdown-number { font-size: 28px; }
+            .holiday-label, .special-label { font-size: 5px; padding: 0 2px; }
+            .badge { font-size: 6px; top: 0px; left: 1px; }
+            .cell.month-cell { font-size: 10px; }
+            .cell.week-cell { font-size: 8px; }
+            .cell.week-cell span { font-size: 7px; padding: 1px 3px; }
         }
         .footnote {
-            margin-top: 20px;
-            font-size: 12px;
+            margin-top: 16px;
+            font-size: 11px;
             color: #94a3b8;
             text-align: center;
             border-top: 1px solid #000;
-            padding-top: 14px;
+            padding-top: 12px;
         }
         .debug-info {
-            margin-top: 10px;
-            font-size: 11px;
+            margin-top: 8px;
+            font-size: 10px;
             color: #64748b;
             text-align: center;
             background: #f1f5f9;
-            padding: 6px;
-            border-radius: 12px;
+            padding: 4px;
+            border-radius: 10px;
             border: 1px solid #000;
         }
     </style>
@@ -299,19 +366,18 @@
     </div>
 
     <div class="calendar-grid" id="calendarGrid"></div>
-    <div class="footnote">⭐ 法定假期标注 · 今日高亮 · 黑色边框</div>
-    
+    <div class="footnote">🟡 法定假期 · 🔵 特殊日期 · 今日高亮</div>
+    <div class="debug-info" id="debugInfo">加载中...</div>
 </div>
 <script>
     (function() {
         // ============================================================
-        // ★★★ 在这里配置假期 ★★★
-        // 格式: '年份-月份-日期': { name: '显示名称', badge: '左上角标记' }
+        // ★★★ 配置假期 ★★★
         // ============================================================
         const HOLIDAYS = {
             '2026-9-10': { name: '教师节', badge: '' },
             '2026-9-25': { name: '中秋节', badge: '休' },
-'2026-10-1': { name: '国庆节', badge: '休' },
+            '2026-10-1': { name: '国庆节', badge: '休' },
             '2026-10-2': { name: '国庆节', badge: '休' },
             '2026-10-3': { name: '国庆节', badge: '休' },
             '2026-10-4': { name: '国庆节', badge: '休' },
@@ -323,21 +389,39 @@
             '2027-1-3': { name: '元旦', badge: '休' },
         };
 
-        // ★★★ 倒计时目标日期：年, 月(0=1月), 日 ★★★
+        // ============================================================
+        // ★★★ 配置特殊日期（期中/期末/运动会等） ★★★
+        // ============================================================
+        const SPECIAL_DATES = {
+            '2026-10-15': { name: '期中考试', badge: '考' },
+            '2026-10-16': { name: '期中考试', badge: '考' },
+            '2026-10-17': { name: '期中考试', badge: '考' },
+            '2026-12-20': { name: '期末考试', badge: '考' },
+            '2026-12-21': { name: '期末考试', badge: '考' },
+            '2026-12-22': { name: '期末考试', badge: '考' },
+            '2026-12-23': { name: '期末考试', badge: '考' },
+            '2026-9-28': { name: '运动会', badge: '运' },
+            '2026-9-29': { name: '运动会', badge: '运' },
+        };
+
+        // ============================================================
+        // ★★★ 开关：是否显示特殊日期 ★★★
+        // true  = 显示特殊日期（蓝色背景）
+        // false = 隐藏特殊日期（只显示假期）
+        // ============================================================
+        const SHOW_SPECIAL_DATES = false;  // ← 改这里：true 或 false
+
+        // ============================================================
+
         const TARGET_YEAR = 2027;
-        const TARGET_MONTH = 0;   // 0 = 1月
+        const TARGET_MONTH = 0;
         const TARGET_DAY = 22;
 
-        // ---------- 倒计时计算（兼容所有浏览器） ----------
         function getDaysUntil(targetYear, targetMonth, targetDay) {
             const now = new Date();
-            // 获取当前时间的年、月、日（去掉时分秒）
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            // 目标日期
             const target = new Date(targetYear, targetMonth, targetDay);
-            // 计算相差毫秒数
             const diff = target.getTime() - today.getTime();
-            // 转换为天数（向上取整，不足一天按一天算）
             const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
             return days > 0 ? days : 0;
         }
@@ -350,175 +434,203 @@
         }
 
         // ---------- 生成日历数据 ----------
-        const startDate = new Date(2026, 8, 1);
-        const endDate = new Date(2027, 0, 31);
+        function buildCalendar() {
+            const startDate = new Date(2026, 8, 1);
+            const endDate = new Date(2027, 0, 31);
 
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+            const today = new Date();
+            const todayStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
 
-        const days = [];
-        let current = new Date(startDate);
-        while (current <= endDate) {
-            const year = current.getFullYear();
-            const month = current.getMonth() + 1;
-            const day = current.getDate();
-            const dateStr = `${year}-${month}-${day}`;
-            const weekDay = current.getDay();
-            days.push({
-                year, month, day,
-                dateStr,
-                weekDay,
-                isToday: dateStr === todayStr,
-            });
-            current.setDate(current.getDate() + 1);
-        }
-
-        // 构建周次 (从周一开始)
-        let weekStart = new Date(startDate);
-        while (weekStart.getDay() !== 1) {
-            weekStart.setDate(weekStart.getDate() - 1);
-        }
-
-        const weeks = [];
-        let weekStartDate = new Date(weekStart);
-        let weekIndex = 1;
-        while (weekStartDate <= endDate) {
-            const weekDays = [];
-            for (let i = 0; i < 7; i++) {
-                const d = new Date(weekStartDate);
-                d.setDate(weekStartDate.getDate() + i);
-                const year = d.getFullYear();
-                const month = d.getMonth() + 1;
-                const day = d.getDate();
+            const days = [];
+            let current = new Date(startDate);
+            while (current <= endDate) {
+                const year = current.getFullYear();
+                const month = current.getMonth() + 1;
+                const day = current.getDate();
                 const dateStr = `${year}-${month}-${day}`;
-                if (d >= startDate && d <= endDate) {
-                    weekDays.push({
-                        year, month, day, dateStr,
-                        weekDay: d.getDay(),
-                        isToday: dateStr === todayStr,
-                    });
-                } else {
-                    weekDays.push(null);
-                }
-            }
-            const hasValid = weekDays.some(d => d !== null);
-            if (hasValid) {
-                weeks.push({
-                    weekIndex: weekIndex,
-                    days: weekDays
+                const weekDay = current.getDay();
+                days.push({
+                    year, month, day,
+                    dateStr,
+                    weekDay,
+                    isToday: dateStr === todayStr,
                 });
-                weekIndex++;
+                current.setDate(current.getDate() + 1);
             }
-            weekStartDate.setDate(weekStartDate.getDate() + 7);
+
+            let weekStart = new Date(startDate);
+            while (weekStart.getDay() !== 1) {
+                weekStart.setDate(weekStart.getDate() - 1);
+            }
+
+            const weeks = [];
+            let weekStartDate = new Date(weekStart);
+            let weekIndex = 1;
+            while (weekStartDate <= endDate) {
+                const weekDays = [];
+                for (let i = 0; i < 7; i++) {
+                    const d = new Date(weekStartDate);
+                    d.setDate(weekStartDate.getDate() + i);
+                    const year = d.getFullYear();
+                    const month = d.getMonth() + 1;
+                    const day = d.getDate();
+                    const dateStr = `${year}-${month}-${day}`;
+                    if (d >= startDate && d <= endDate) {
+                        weekDays.push({
+                            year, month, day, dateStr,
+                            weekDay: d.getDay(),
+                            isToday: dateStr === todayStr,
+                        });
+                    } else {
+                        weekDays.push(null);
+                    }
+                }
+                const hasValid = weekDays.some(d => d !== null);
+                if (hasValid) {
+                    weeks.push({
+                        weekIndex: weekIndex,
+                        days: weekDays
+                    });
+                    weekIndex++;
+                }
+                weekStartDate.setDate(weekStartDate.getDate() + 7);
+            }
+
+            return weeks;
         }
 
-        // ---------- 渲染 ----------
-        const grid = document.getElementById('calendarGrid');
-        grid.innerHTML = '';
+        function renderCalendar() {
+            const weeks = buildCalendar();
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
 
-        const monthRowCount = {};
-        weeks.forEach((week) => {
-            let month = -1;
-            for (let d of week.days) {
-                if (d !== null) { month = d.month; break; }
-            }
-            if (month !== -1) {
-                monthRowCount[month] = (monthRowCount[month] || 0) + 1;
-            }
-        });
+            const monthRowCount = {};
+            weeks.forEach((week) => {
+                let month = -1;
+                for (let d of week.days) {
+                    if (d !== null) { month = d.month; break; }
+                }
+                if (month !== -1) {
+                    monthRowCount[month] = (monthRowCount[month] || 0) + 1;
+                }
+            });
 
-        const monthRendered = {};
-        let holidayCount = 0;
+            const monthRendered = {};
+            let holidayCount = 0;
+            let specialCount = 0;
 
-        weeks.forEach((week) => {
-            let currentMonth = -1;
-            for (let d of week.days) {
-                if (d !== null) { currentMonth = d.month; break; }
-            }
+            weeks.forEach((week) => {
+                let currentMonth = -1;
+                for (let d of week.days) {
+                    if (d !== null) { currentMonth = d.month; break; }
+                }
 
-            const monthCell = document.createElement('div');
-            monthCell.className = 'cell month-cell';
-            if (currentMonth !== -1) {
-                const rendered = monthRendered[currentMonth] || 0;
-                if (rendered === 0) {
-                    const span = monthRowCount[currentMonth] || 1;
-                    monthCell.textContent = currentMonth + '月';
-                    monthCell.style.setProperty('--row-span', span);
-                    monthCell.style.gridRow = `span ${span}`;
-                    monthRendered[currentMonth] = 1;
+                const monthCell = document.createElement('div');
+                monthCell.className = 'cell month-cell';
+                if (currentMonth !== -1) {
+                    const rendered = monthRendered[currentMonth] || 0;
+                    if (rendered === 0) {
+                        const span = monthRowCount[currentMonth] || 1;
+                        monthCell.textContent = currentMonth + '月';
+                        monthCell.style.setProperty('--row-span', span);
+                        monthCell.style.gridRow = `span ${span}`;
+                        monthRendered[currentMonth] = 1;
+                    } else {
+                        monthCell.style.display = 'none';
+                        monthRendered[currentMonth] = (monthRendered[currentMonth] || 0) + 1;
+                    }
                 } else {
                     monthCell.style.display = 'none';
-                    monthRendered[currentMonth] = (monthRendered[currentMonth] || 0) + 1;
                 }
-            } else {
-                monthCell.style.display = 'none';
-            }
-            grid.appendChild(monthCell);
+                grid.appendChild(monthCell);
 
-            const weekCell = document.createElement('div');
-            weekCell.className = 'cell week-cell';
-            weekCell.innerHTML = `<span>第${week.weekIndex}周</span>`;
-            grid.appendChild(weekCell);
+                const weekCell = document.createElement('div');
+                weekCell.className = 'cell week-cell';
+                weekCell.innerHTML = `<span>第${week.weekIndex}周</span>`;
+                grid.appendChild(weekCell);
 
-            week.days.forEach((day) => {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
+                week.days.forEach((day) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
 
-                if (day === null) {
-                    cell.classList.add('empty');
-                    cell.textContent = '';
-                    grid.appendChild(cell);
-                    return;
-                }
-
-                cell.textContent = day.day;
-
-                if (day.weekDay === 0 || day.weekDay === 6) {
-                    cell.classList.add('weekend');
-                }
-
-                const bgClass = `month-bg-${day.month}`;
-                cell.classList.add(bgClass);
-
-                const holiday = HOLIDAYS[day.dateStr];
-                if (holiday) {
-                    cell.classList.add('holiday');
-                    if (holiday.badge && holiday.badge !== '') {
-                        const badge = document.createElement('span');
-                        badge.className = 'holiday-badge';
-                        badge.textContent = holiday.badge;
-                        cell.appendChild(badge);
+                    if (day === null) {
+                        cell.classList.add('empty');
+                        cell.textContent = '';
+                        grid.appendChild(cell);
+                        return;
                     }
-                    const label = document.createElement('span');
-                    label.className = 'holiday-label';
-                    label.textContent = holiday.name;
-                    cell.appendChild(label);
-                    holidayCount++;
-                }
 
-                if (day.isToday) {
-                    cell.classList.add('today');
-                }
+                    cell.textContent = day.day;
 
-                grid.appendChild(cell);
+                    if (day.weekDay === 0 || day.weekDay === 6) {
+                        cell.classList.add('weekend');
+                    }
+
+                    const bgClass = `month-bg-${day.month}`;
+                    cell.classList.add(bgClass);
+
+                    // 假期（始终显示）
+                    const holiday = HOLIDAYS[day.dateStr];
+                    if (holiday) {
+                        cell.classList.add('holiday');
+                        if (holiday.badge && holiday.badge !== '') {
+                            const badge = document.createElement('span');
+                            badge.className = 'badge badge-holiday';
+                            badge.textContent = holiday.badge;
+                            cell.appendChild(badge);
+                        }
+                        const label = document.createElement('span');
+                        label.className = 'holiday-label';
+                        label.textContent = holiday.name;
+                        cell.appendChild(label);
+                        holidayCount++;
+                    }
+
+                    // 特殊日期（根据开关控制）
+                    if (SHOW_SPECIAL_DATES) {
+                        const special = SPECIAL_DATES[day.dateStr];
+                        if (special) {
+                            cell.classList.add('special');
+                            if (special.badge && special.badge !== '') {
+                                const badge = document.createElement('span');
+                                badge.className = 'badge badge-special';
+                                badge.textContent = special.badge;
+                                cell.appendChild(badge);
+                            }
+                            const label = document.createElement('span');
+                            label.className = 'special-label';
+                            label.textContent = special.name;
+                            cell.appendChild(label);
+                            specialCount++;
+                        }
+                    }
+
+                    if (day.isToday) {
+                        cell.classList.add('today');
+                    }
+
+                    grid.appendChild(cell);
+                });
             });
-        });
 
-        // 更新调试信息
-        const debugEl = document.getElementById('debugInfo');
-        const holidayKeys = Object.keys(HOLIDAYS);
-        debugEl.innerHTML = `✅ 已配置 ${holidayKeys.length} 个假期，日历中渲染了 ${holidayCount} 个假期标签`;
+            const debugEl = document.getElementById('debugInfo');
+            const holidayKeys = Object.keys(HOLIDAYS);
+            const specialKeys = Object.keys(SPECIAL_DATES);
+            const specialStatus = SHOW_SPECIAL_DATES ? `显示中 (${specialKeys.length}个)` : '已隐藏';
+            debugEl.innerHTML = `✅ 假期: ${holidayKeys.length} 个 (渲染 ${holidayCount}) | 特殊日期: ${specialStatus} (渲染 ${specialCount})`;
+        }
 
-        // ---------- 执行倒计时更新 ----------
+        // ---------- 初始化 ----------
+        renderCalendar();
         updateCountdown();
 
         // 滚动到今日
-        const todayEls = document.querySelectorAll('.cell.today');
-        if (todayEls.length > 0) {
-            setTimeout(() => {
+        setTimeout(() => {
+            const todayEls = document.querySelectorAll('.cell.today');
+            if (todayEls.length > 0) {
                 todayEls[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
-            }, 300);
-        }
+            }
+        }, 300);
     })();
 </script>
 </body>
