@@ -97,7 +97,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 20px;
             font-weight: 500;
             color: #0f172a;
             background: white;
@@ -135,14 +135,19 @@
             border-right: 1px solid #000;
         }
         .cell.week-cell span {
-            background: #e2e8f0;
-            padding: 1px 5px;
-            border-radius: 30px;
-            font-size: 10px;
-            font-weight: 600;
-            color: #1e293b;
-            white-space: nowrap;
-        }
+    background: #e2e8f0;
+    padding: 2px 4px;
+    border-radius: 30px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #1e293b;
+    /* 纵向排列，文字保持正向 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.3;
+}
         .cell.empty {
             background: transparent !important;
             border-color: #000 !important;
@@ -348,9 +353,9 @@
 <body>
 <div class="calendar-wrapper" id="app">
     <div class="countdown-card">
-        <div class="countdown-label">📅 距离放假</div>
+        <div class="countdown-label">📅 距离过年</div>
         <div class="countdown-number" id="countdownDisplay">-- <span>天</span></div>
-        <div class="countdown-sub" id="targetDateLabel">目标：2027年1月22日</div>
+        <div class="countdown-sub" id="targetDateLabel">目标：2027年2月5日</div>
     </div>
 
     <div class="week-header">
@@ -387,6 +392,8 @@
             '2027-1-1': { name: '元旦', badge: '休' },
             '2027-1-2': { name: '元旦', badge: '休' },
             '2027-1-3': { name: '元旦', badge: '休' },
+'2027-1-31': { name: '小年', badge: '' },
+'2027-2-5': { name: '除夕', badge: '' },
         };
 
         // ============================================================
@@ -414,8 +421,8 @@
         // ============================================================
 
         const TARGET_YEAR = 2027;
-        const TARGET_MONTH = 0;
-        const TARGET_DAY = 22;
+        const TARGET_MONTH = 1;
+        const TARGET_DAY = 5;
 
         function getDaysUntil(targetYear, targetMonth, targetDay) {
             const now = new Date();
@@ -436,7 +443,7 @@
         // ---------- 生成日历数据 ----------
         function buildCalendar() {
             const startDate = new Date(2026, 8, 1);
-            const endDate = new Date(2027, 0, 31);
+            const endDate = new Date(2027, 1,7);
 
             const today = new Date();
             const todayStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
@@ -545,9 +552,11 @@
                 grid.appendChild(monthCell);
 
                 const weekCell = document.createElement('div');
-                weekCell.className = 'cell week-cell';
-                weekCell.innerHTML = `<span>第${week.weekIndex}周</span>`;
-                grid.appendChild(weekCell);
+weekCell.className = 'cell week-cell';
+// 将 "第X周" 拆分成三个字符，每个占一行
+const weekNum = week.weekIndex;
+weekCell.innerHTML = `<span>第<br>${weekNum}<br>周</span>`;
+grid.appendChild(weekCell);
 
                 week.days.forEach((day) => {
                     const cell = document.createElement('div');
