@@ -1,16 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!-- ===== 微信分享卡片 ===== -->
-<meta property="og:title" content="2026-2027 学年上学期日历" />
-<meta property="og:description" content="📅 包含假期标注、考试提醒、倒计时功能的教学日历" />
-<meta property="og:image" content="https://tardis923.github.io/Holiday-Countdown/preview.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://tardis923.github.io/Holiday-Countdown/" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    
+    <!-- ============================================================ -->
+    <!-- ★★★ 微信分享卡片配置 ★★★ -->
+    <!-- 将下面的链接替换为您的实际 GitHub Pages 地址 -->
+    <!-- ============================================================ -->
+    
+    <!-- 基础信息 -->
     <title>2026-2027 学年上学期日历</title>
+    <meta name="description" content="📅 包含假期标注、考试提醒、倒计时功能的教学日历" />
+    
+    <!-- Open Graph 协议（微信/QQ/微博等通用） -->
+    <meta property="og:title" content="2026-2027 学年上学期教学日历" />
+    <meta property="og:description" content="📅 包含假期标注、考试提醒、倒计时功能，方便查看学期安排" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tardis923.github.io/Holiday-Countdown/" />
+    <meta property="og:image" content="https://tardis923.github.io/Holiday-Countdown/preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:site_name" content="教学日历" />
+    <meta property="og:locale" content="zh_CN" />
+    
+    <!-- Twitter Card（微信也会参考） -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="2026-2027 学年上学期教学日历" />
+    <meta name="twitter:description" content="📅 包含假期标注、考试提醒、倒计时功能的教学日历" />
+    <meta name="twitter:image" content="https://tardis923.github.io/Holiday-Countdown/preview.png" />
+    
+    <!-- 微信专用（增强兼容性） -->
+    <meta property="og:image:secure_url" content="https://tardis923.github.io/Holiday-Countdown/preview.png" />
+    
+    <!-- ============================================================ -->
+    
     <style>
         * {
             box-sizing: border-box;
@@ -104,7 +129,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 500;
             color: #0f172a;
             background: white;
@@ -142,19 +167,18 @@
             border-right: 1px solid #000;
         }
         .cell.week-cell span {
-    background: #e2e8f0;
-    padding: 2px 4px;
-    border-radius: 30px;
-    font-size: 10px;
-    font-weight: 600;
-    color: #1e293b;
-    /* 纵向排列，文字保持正向 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.3;
-}
+            background: #e2e8f0;
+            padding: 2px 4px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.3;
+        }
         .cell.empty {
             background: transparent !important;
             border-color: #000 !important;
@@ -317,7 +341,7 @@
 
         @media (max-width: 480px) {
             .calendar-wrapper { padding: 16px 8px 20px; }
-            .cell { font-size: 16px; min-height: 38px; padding: 2px 1px; }
+            .cell { font-size: 14px; min-height: 40px; padding: 2px 1px; }
             .week-header { font-size: 10px; padding: 4px 1px; gap: 0px; }
             .week-header > div { padding: 0 1px; }
             .countdown-number { font-size: 34px; }
@@ -325,10 +349,10 @@
             .badge { font-size: 7px; top: 0px; left: 2px; }
             .cell.month-cell { font-size: 12px; }
             .cell.week-cell { font-size: 9px; }
-            .cell.week-cell span { font-size: 8px; padding: 1px 4px; }
+            .cell.week-cell span { font-size: 8px; padding: 2px 3px; }
         }
         @media (max-width: 380px) {
-            .cell { font-size: 10px; min-height: 34px; }
+            .cell { font-size: 12px; min-height: 36px; }
             .week-header { font-size: 9px; }
             .countdown-number { font-size: 28px; }
             .holiday-label, .special-label { font-size: 5px; padding: 0 2px; }
@@ -360,9 +384,9 @@
 <body>
 <div class="calendar-wrapper" id="app">
     <div class="countdown-card">
-        <div class="countdown-label">📅 距离过年</div>
+        <div class="countdown-label" id="countdownLabel">📅 距离放假</div>
         <div class="countdown-number" id="countdownDisplay">-- <span>天</span></div>
-        <div class="countdown-sub" id="targetDateLabel">目标：2027年2月5日</div>
+        <div class="countdown-sub" id="targetDateLabel">目标：2027年1月22日</div>
     </div>
 
     <div class="week-header">
@@ -399,8 +423,6 @@
             '2027-1-1': { name: '元旦', badge: '休' },
             '2027-1-2': { name: '元旦', badge: '休' },
             '2027-1-3': { name: '元旦', badge: '休' },
-'2027-1-31': { name: '小年', badge: '' },
-'2027-2-5': { name: '除夕', badge: '' },
         };
 
         // ============================================================
@@ -423,34 +445,115 @@
         // true  = 显示特殊日期（蓝色背景）
         // false = 隐藏特殊日期（只显示假期）
         // ============================================================
-        const SHOW_SPECIAL_DATES = false;  // ← 改这里：true 或 false
+        const SHOW_SPECIAL_DATES = false;
 
         // ============================================================
 
-        const TARGET_YEAR = 2027;
-        const TARGET_MONTH = 1;
-        const TARGET_DAY = 5;
+        // ---------- 获取所有带"休"字的假期日期 ----------
+        function getHolidayDates() {
+            const dates = [];
+            for (const [dateStr, config] of Object.entries(HOLIDAYS)) {
+                if (config.badge === '休') {
+                    const parts = dateStr.split('-');
+                    dates.push({
+                        dateStr: dateStr,
+                        year: parseInt(parts[0]),
+                        month: parseInt(parts[1]) - 1, // JS月份从0开始
+                        day: parseInt(parts[2]),
+                        name: config.name
+                    });
+                }
+            }
+            return dates;
+        }
 
-        function getDaysUntil(targetYear, targetMonth, targetDay) {
+        // ---------- 倒计时计算：自动找最近的"休"字假期 ----------
+        function calculateHolidayCountdown() {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const target = new Date(targetYear, targetMonth, targetDay);
-            const diff = target.getTime() - today.getTime();
-            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-            return days > 0 ? days : 0;
+            const holidayDates = getHolidayDates();
+
+            // 按日期排序
+            holidayDates.sort((a, b) => {
+                return new Date(a.year, a.month, a.day) - new Date(b.year, b.month, b.day);
+            });
+
+            // 找最近的假期（今天或今天之后）
+            let nearestHoliday = null;
+            let nearestDiff = Infinity;
+
+            for (const h of holidayDates) {
+                const holidayDate = new Date(h.year, h.month, h.day);
+                const diff = Math.ceil((holidayDate - today) / (1000 * 60 * 60 * 24));
+
+                // 如果是今天或之后，且比当前最近的更近
+                if (diff >= 0 && diff < nearestDiff) {
+                    nearestDiff = diff;
+                    nearestHoliday = h;
+                }
+            }
+
+            // 如果今天正好是假期，显示"休假中"
+            if (nearestDiff === 0 && nearestHoliday) {
+                return {
+                    status: 'holiday',
+                    days: 0,
+                    name: nearestHoliday.name,
+                    dateStr: nearestHoliday.dateStr,
+                    message: '🎉 休假中'
+                };
+            }
+
+            // 如果有未来的假期
+            if (nearestHoliday && nearestDiff > 0) {
+                return {
+                    status: 'countdown',
+                    days: nearestDiff,
+                    name: nearestHoliday.name,
+                    dateStr: nearestHoliday.dateStr,
+                    message: `距离 ${nearestHoliday.name}`
+                };
+            }
+
+            // 没有找到假期（兜底）
+            return {
+                status: 'none',
+                days: 0,
+                name: '',
+                dateStr: '',
+                message: '暂无假期'
+            };
         }
 
         function updateCountdown() {
-            const days = getDaysUntil(TARGET_YEAR, TARGET_MONTH, TARGET_DAY);
-            document.getElementById('countdownDisplay').innerHTML = `${days} <span>天</span>`;
-            document.getElementById('targetDateLabel').textContent = 
-                `🎯 目标：${TARGET_YEAR}年${TARGET_MONTH+1}月${TARGET_DAY}日`;
+            const result = calculateHolidayCountdown();
+
+            const displayEl = document.getElementById('countdownDisplay');
+            const labelEl = document.getElementById('countdownLabel');
+            const subEl = document.getElementById('targetDateLabel');
+
+            if (result.status === 'holiday') {
+                // 今天放假
+                displayEl.innerHTML = `🎉 <span>休假中</span>`;
+                labelEl.textContent = `📅 ${result.name}`;
+                subEl.textContent = `🎊 好好休息吧！`;
+            } else if (result.status === 'countdown') {
+                // 倒计时
+                displayEl.innerHTML = `${result.days} <span>天</span>`;
+                labelEl.textContent = `📅 ${result.message}`;
+                subEl.textContent = `🎯 ${result.name}：${result.dateStr}`;
+            } else {
+                // 没有假期
+                displayEl.innerHTML = `-- <span>天</span>`;
+                labelEl.textContent = `📅 暂无假期`;
+                subEl.textContent = `请添加带"休"字的假期`;
+            }
         }
 
         // ---------- 生成日历数据 ----------
         function buildCalendar() {
             const startDate = new Date(2026, 8, 1);
-            const endDate = new Date(2027, 1,7);
+            const endDate = new Date(2027, 0, 31);
 
             const today = new Date();
             const todayStr = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
@@ -559,11 +662,10 @@
                 grid.appendChild(monthCell);
 
                 const weekCell = document.createElement('div');
-weekCell.className = 'cell week-cell';
-// 将 "第X周" 拆分成三个字符，每个占一行
-const weekNum = week.weekIndex;
-weekCell.innerHTML = `<span>第<br>${weekNum}<br>周</span>`;
-grid.appendChild(weekCell);
+                weekCell.className = 'cell week-cell';
+                const weekNum = week.weekIndex;
+                weekCell.innerHTML = `<span>第<br>${weekNum}<br>周</span>`;
+                grid.appendChild(weekCell);
 
                 week.days.forEach((day) => {
                     const cell = document.createElement('div');
@@ -585,7 +687,7 @@ grid.appendChild(weekCell);
                     const bgClass = `month-bg-${day.month}`;
                     cell.classList.add(bgClass);
 
-                    // 假期（始终显示）
+                    // 假期
                     const holiday = HOLIDAYS[day.dateStr];
                     if (holiday) {
                         cell.classList.add('holiday');
@@ -602,7 +704,7 @@ grid.appendChild(weekCell);
                         holidayCount++;
                     }
 
-                    // 特殊日期（根据开关控制）
+                    // 特殊日期
                     if (SHOW_SPECIAL_DATES) {
                         const special = SPECIAL_DATES[day.dateStr];
                         if (special) {
