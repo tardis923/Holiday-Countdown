@@ -294,9 +294,9 @@
         /* ===== 左上角标记 ===== */
         .badge {
             position: absolute;
-            top: 1px;
-            left: 3px;
-            font-size: 8px;
+            top: 5px;
+            left: 5px;
+            font-size: 10px;
             font-weight: 700;
             line-height: 1;
             z-index: 3;
@@ -442,10 +442,17 @@
 
         // ============================================================
         // ★★★ 开关：是否显示特殊日期 ★★★
-        // true  = 显示特殊日期（蓝色背景）
-        // false = 隐藏特殊日期（只显示假期）
+        // true  = 显示特殊日期（蓝色背景），同时倒计时计算特殊日期
+        // false = 隐藏特殊日期（只显示假期），倒计时只计算假期
         // ============================================================
         const SHOW_SPECIAL_DATES = false;
+
+        // ============================================================
+        // ★★★ 最终目标日期（当没有"休"字假期也没有特殊日期时使用） ★★★
+        // ============================================================
+        const FINAL_TARGET_YEAR = 2027;
+        const FINAL_TARGET_MONTH = 0;   // 0 = 1月
+        const FINAL_TARGET_DAY = 22;
 
         // ============================================================
 
@@ -458,95 +465,176 @@
                     dates.push({
                         dateStr: dateStr,
                         year: parseInt(parts[0]),
-                        month: parseInt(parts[1]) - 1, // JS月份从0开始
+                        month: parseInt(parts[1]) - 1,
                         day: parseInt(parts[2]),
-                        name: config.name
+                        name: config.name,
+                        type: 'holiday'
                     });
                 }
             }
             return dates;
         }
 
-        // ---------- 倒计时计算：自动找最近的"休"字假期 ----------
-        function calculateHolidayCountdown() {
+        // ---------- 获取所有特殊日期 ----------
+        function getSpecialDates() {
+            const dates = [];
+            for (const [dateStr, config] of Object.entries(SPECIAL_DATES)) {
+                const parts = dateStr.split('-');
+                dates.push({
+                    dateStr: dateStr,
+                    year: parseInt(parts[0]),
+                    month: parseInt(parts[1]) - 1,
+                    day: parseInt(parts[2]),
+                    name: config.name,
+                    badge: config.badge,
+                    type: 'special'
+                });
+            }
+            return dates;
+        }
+
+        // ---------- 计算两个日期之间的天数 ----------
+        function getDaysBetween(date1, date2) {
+            const d1 = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
+            const d2 = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
+            return Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
+        }
+
+        // ---------- 倒计时计算 ----------
+        function calculateCountdown() {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            // 收集所有日期（假期 + 特殊日期）
+            let allDates = [];
+
+            // 1. 添加假期（带"休"字的）
             const holidayDates = getHolidayDates();
+            allDates = allDates.concat(holidayDates);
+
+            // 2. 如果开关打开，添加特殊日期
+            if (SHOW_SPECIAL_DATES) {
+                const specialDates = getSpecialDates();
+                allDates = allDates.concat(specialDates);
+            }
 
             // 按日期排序
-            holidayDates.sort((a, b) => {
+            allDates.sort((a, b) => {
                 return new Date(a.year, a.month, a.day) - new Date(b.year, b.month, b.day);
             });
 
-            // 找最近的假期（今天或今天之后）
-            let nearestHoliday = null;
+            // 找最近的日期（今天或今天之后）
+            let nearestDate = null;
             let nearestDiff = Infinity;
 
-            for (const h of holidayDates) {
-                const holidayDate = new Date(h.year, h.month, h.day);
-                const diff = Math.ceil((holidayDate - today) / (1000 * 60 * 60 * 24));
+            for (const d of allDates) {
+                const dateObj = new Date(d.year, d.month, d.day);
+                const diff = getDaysBetween(today, dateObj);
 
-                // 如果是今天或之后，且比当前最近的更近
                 if (diff >= 0 && diff < nearestDiff) {
                     nearestDiff = diff;
-                    nearestHoliday = h;
+                    nearestDate = d;
                 }
             }
 
-            // 如果今天正好是假期，显示"休假中"
-            if (nearestDiff === 0 && nearestHoliday) {
+            // 如果今天正好是某个日期
+            if (nearestDiff === 0 && nearestDate) {
+                const typeLabel = nearestDate.type === 'holiday' ? '🎉' : '📌';
+                const statusText = nearestDate.type === 'holiday' ? '休假中' : `${nearestDate.name}进行中`;
                 return {
-                    status: 'holiday',
+                    status: 'today',
                     days: 0,
-                    name: nearestHoliday.name,
-                    dateStr: nearestHoliday.dateStr,
-                    message: '🎉 休假中'
+                    name: nearestDate.name,
+                    dateStr: nearestDate.dateStr,
+                    type: nearestDate.type,
+                    label: `📅 ${nearestDate.name}`,
+                    sub: `${typeLabel} ${statusText}！`
                 };
             }
 
-            // 如果有未来的假期
-            if (nearestHoliday && nearestDiff > 0) {
+            // 如果有未来的日期
+            if (nearestDate && nearestDiff > 0) {
+                const typeLabel = nearestDate.type === 'holiday' ? '假期' : '特殊日期';
                 return {
                     status: 'countdown',
                     days: nearestDiff,
-                    name: nearestHoliday.name,
-                    dateStr: nearestHoliday.dateStr,
-                    message: `距离 ${nearestHoliday.name}`
+                    name: nearestDate.name,
+                    dateStr: nearestDate.dateStr,
+                    type: nearestDate.type,
+                    label: `📅 距离 ${nearestDate.name}`,
+                    sub: `🎯 ${nearestDate.name}：${nearestDate.dateStr}`
                 };
             }
 
-            // 没有找到假期（兜底）
+            // ============================================================
+            // 没有找到任何日期，使用最终目标日期
+            // ============================================================
+            const targetDate = new Date(FINAL_TARGET_YEAR, FINAL_TARGET_MONTH, FINAL_TARGET_DAY);
+            const diffToTarget = getDaysBetween(today, targetDate);
+
+            if (diffToTarget === 0) {
+                return {
+                    status: 'target_today',
+                    days: 0,
+                    name: '今天',
+                    dateStr: `${FINAL_TARGET_YEAR}年${FINAL_TARGET_MONTH+1}月${FINAL_TARGET_DAY}日`,
+                    type: 'target',
+                    label: `📅 今天`,
+                    sub: `🎯 目标日期就是今天！`
+                };
+            }
+
+            if (diffToTarget > 0) {
+                return {
+                    status: 'target_countdown',
+                    days: diffToTarget,
+                    name: '目标日期',
+                    dateStr: `${FINAL_TARGET_YEAR}年${FINAL_TARGET_MONTH+1}月${FINAL_TARGET_DAY}日`,
+                    type: 'target',
+                    label: `📅 距离目标日期`,
+                    sub: `🎯 ${FINAL_TARGET_YEAR}年${FINAL_TARGET_MONTH+1}月${FINAL_TARGET_DAY}日`
+                };
+            }
+
+            // 如果目标日期已过
             return {
-                status: 'none',
+                status: 'expired',
                 days: 0,
                 name: '',
                 dateStr: '',
-                message: '暂无假期'
+                type: 'none',
+                label: `📅 已过期`,
+                sub: `目标日期已过，请更新配置`
             };
         }
 
         function updateCountdown() {
-            const result = calculateHolidayCountdown();
+            const result = calculateCountdown();
 
             const displayEl = document.getElementById('countdownDisplay');
             const labelEl = document.getElementById('countdownLabel');
             const subEl = document.getElementById('targetDateLabel');
 
-            if (result.status === 'holiday') {
-                // 今天放假
-                displayEl.innerHTML = `🎉 <span>休假中</span>`;
-                labelEl.textContent = `📅 ${result.name}`;
-                subEl.textContent = `🎊 好好休息吧！`;
+            if (result.status === 'today') {
+                displayEl.innerHTML = `🎯 <span>进行中</span>`;
+                labelEl.textContent = result.label;
+                subEl.textContent = result.sub;
             } else if (result.status === 'countdown') {
-                // 倒计时
                 displayEl.innerHTML = `${result.days} <span>天</span>`;
-                labelEl.textContent = `📅 ${result.message}`;
-                subEl.textContent = `🎯 ${result.name}：${result.dateStr}`;
+                labelEl.textContent = result.label;
+                subEl.textContent = result.sub;
+            } else if (result.status === 'target_countdown') {
+                displayEl.innerHTML = `${result.days} <span>天</span>`;
+                labelEl.textContent = result.label;
+                subEl.textContent = result.sub;
+            } else if (result.status === 'target_today') {
+                displayEl.innerHTML = `🎯 <span>就是今天</span>`;
+                labelEl.textContent = result.label;
+                subEl.textContent = result.sub;
             } else {
-                // 没有假期
                 displayEl.innerHTML = `-- <span>天</span>`;
-                labelEl.textContent = `📅 暂无假期`;
-                subEl.textContent = `请添加带"休"字的假期`;
+                labelEl.textContent = result.label;
+                subEl.textContent = result.sub;
             }
         }
 
