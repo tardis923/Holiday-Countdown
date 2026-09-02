@@ -307,12 +307,9 @@
         // ============================================================
         // ★★★ 在这里配置假期 ★★★
         // 格式: '年份-月份-日期': { name: '显示名称', badge: '左上角标记' }
-        // badge 可以是: '休'、'假'、'★'、'' (空字符串则不显示)
         // ============================================================
         const HOLIDAYS = {
-            // 2026年9月
             '2026-9-10': { name: '教师节', badge: '' },
-            // 2026年10月
             '2026-9-25': { name: '中秋节', badge: '休' },
 '2026-10-1': { name: '国庆节', badge: '休' },
             '2026-10-2': { name: '国庆节', badge: '休' },
@@ -321,14 +318,36 @@
             '2026-10-5': { name: '国庆节', badge: '休' },
             '2026-10-6': { name: '国庆节', badge: '休' },
             '2026-10-7': { name: '国庆节', badge: '休' },
-            // 2027年1月
             '2027-1-1': { name: '元旦', badge: '休' },
             '2027-1-2': { name: '元旦', badge: '休' },
             '2027-1-3': { name: '元旦', badge: '休' },
         };
-        // ============================================================
 
-        const TARGET_DATE = new Date(2027, 0, 22);
+        // ★★★ 倒计时目标日期：年, 月(0=1月), 日 ★★★
+        const TARGET_YEAR = 2027;
+        const TARGET_MONTH = 0;   // 0 = 1月
+        const TARGET_DAY = 22;
+
+        // ---------- 倒计时计算（兼容所有浏览器） ----------
+        function getDaysUntil(targetYear, targetMonth, targetDay) {
+            const now = new Date();
+            // 获取当前时间的年、月、日（去掉时分秒）
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            // 目标日期
+            const target = new Date(targetYear, targetMonth, targetDay);
+            // 计算相差毫秒数
+            const diff = target.getTime() - today.getTime();
+            // 转换为天数（向上取整，不足一天按一天算）
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            return days > 0 ? days : 0;
+        }
+
+        function updateCountdown() {
+            const days = getDaysUntil(TARGET_YEAR, TARGET_MONTH, TARGET_DAY);
+            document.getElementById('countdownDisplay').innerHTML = `${days} <span>天</span>`;
+            document.getElementById('targetDateLabel').textContent = 
+                `🎯 目标：${TARGET_YEAR}年${TARGET_MONTH+1}月${TARGET_DAY}日`;
+        }
 
         // ---------- 生成日历数据 ----------
         const startDate = new Date(2026, 8, 1);
@@ -397,7 +416,6 @@
         const grid = document.getElementById('calendarGrid');
         grid.innerHTML = '';
 
-        // 计算每个月占用的行数
         const monthRowCount = {};
         weeks.forEach((week) => {
             let month = -1;
@@ -412,14 +430,12 @@
         const monthRendered = {};
         let holidayCount = 0;
 
-        // 逐行渲染
         weeks.forEach((week) => {
             let currentMonth = -1;
             for (let d of week.days) {
                 if (d !== null) { currentMonth = d.month; break; }
             }
 
-            // 月份列
             const monthCell = document.createElement('div');
             monthCell.className = 'cell month-cell';
             if (currentMonth !== -1) {
@@ -439,13 +455,11 @@
             }
             grid.appendChild(monthCell);
 
-            // 周次列
             const weekCell = document.createElement('div');
             weekCell.className = 'cell week-cell';
             weekCell.innerHTML = `<span>第${week.weekIndex}周</span>`;
             grid.appendChild(weekCell);
 
-            // 7天
             week.days.forEach((day) => {
                 const cell = document.createElement('div');
                 cell.className = 'cell';
@@ -459,7 +473,6 @@
 
                 cell.textContent = day.day;
 
-                // 周末背景 (周六日)
                 if (day.weekDay === 0 || day.weekDay === 6) {
                     cell.classList.add('weekend');
                 }
@@ -467,7 +480,6 @@
                 const bgClass = `month-bg-${day.month}`;
                 cell.classList.add(bgClass);
 
-                // 法定假期
                 const holiday = HOLIDAYS[day.dateStr];
                 if (holiday) {
                     cell.classList.add('holiday');
@@ -497,17 +509,7 @@
         const holidayKeys = Object.keys(HOLIDAYS);
         debugEl.innerHTML = `✅ 已配置 ${holidayKeys.length} 个假期，日历中渲染了 ${holidayCount} 个假期标签`;
 
-        // 倒计时更新
-        function updateCountdown() {
-            const now = new Date();
-            const target = new Date(TARGET_DATE);
-            const diff = target - now;
-            let days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-            if (days < 0) days = 0;
-            document.getElementById('countdownDisplay').innerHTML = `${days} <span>天</span>`;
-            const targetStr = `${target.getFullYear()}年${target.getMonth()+1}月${target.getDate()}日`;
-            document.getElementById('targetDateLabel').textContent = `🎯 目标：${targetStr}`;
-        }
+        // ---------- 执行倒计时更新 ----------
         updateCountdown();
 
         // 滚动到今日
